@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PWD Application Form - Carmen Cebu</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #dcefff, #e6f0ff);
+      color: #003366;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #004080;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 2px #a3b9ff;
+    }
+    form {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffffdd;
+      padding: 30px 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 64, 128, 0.2);
+      transition: box-shadow 0.3s ease;
+    }
+    form:hover {
+      box-shadow: 0 0 30px rgba(0, 80, 158, 0.4);
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin-top: 20px;
+      color: #003366;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    label:hover {
+      color: #0059b3;
+    }
+    input[type="text"],
+    input[type="date"],
+    input[type="file"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 15px;
+      margin-top: 8px;
+      border: 2px solid #00509e;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #003366;
+      background: #f7fbff;
+      box-shadow: inset 0 1px 3px #c7d7f9;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
+      outline: none;
+      cursor: text;
+    }
+    input[type="text"]:hover,
+    input[type="date"]:hover,
+    input[type="file"]:hover,
+    select:hover,
+    textarea:hover {
+      border-color: #003366;
+      box-shadow: 0 0 8px #3399ff;
+      background-color: #e6f0ff;
+    }
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    input[type="file"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #003366;
+      box-shadow: 0 0 12px #1a75ff;
+      background-color: #e6f0ff;
+    }
+    button {
+      background-color: #00509e;
+      color: white;
+      border: none;
+      padding: 14px 25px;
+      margin-top: 30px;
+      font-size: 1.15rem;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.4s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,80,158,0.3);
+      display: block;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #003366;
+      box-shadow: 0 6px 12px rgba(0,102,204,0.6);
+    }
+    .optional-label {
+      font-weight: 400;
+      font-style: italic;
+      color: #666;
+      margin-left: 6px;
+    }
+    /* Modal styles */
+    #confirmationModal {
+      display: none;
+      position: fixed;
+      top:0; left:0; right:0; bottom:0;
+      background: rgba(0,0,0,0.45);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    #confirmationModal .content {
+      background: #f9fcff;
+      padding: 25px 35px;
+      border-radius: 20px;
+      max-width: 850px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 0 25px rgba(0,80,158,0.4);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #003366;
+    }
+    #confirmationModal h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-weight: 700;
+      color: #004080;
+      letter-spacing: 0.8px;
+    }
+    #confirmationModal pre {
+      background: #e2ebff;
+      padding: 15px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      font-size: 1rem;
+      color: #003366;
+      border: 1.5px solid #00509e;
+      max-height: 350px;
+      overflow-y: auto;
+      user-select: text;
+    }
+    #confirmationModal button {
+      width: 48%;
+      margin: 15px 1%;
+      padding: 12px 0;
+      font-weight: 700;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0,80,158,0.25);
+    }
+    #confirmBtn {
+      background-color: #00509e;
+      color: white;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+    #confirmBtn:hover {
+      background-color: #003366;
+    }
+    #cancelBtn {
+      background-color: #e0e7ff;
+      color: #003366;
+      border: 2px solid #00509e;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    #cancelBtn:hover {
+      background-color: #c2d0ff;
+      color: #001f4d;
+      border-color: #003366;
+    }
+    /* Inline-flex for radio groups and small inputs */
+    .inline-group {
+      display: flex;
+      gap: 25px;
+      margin-top: 8px;
+    }
+    .inline-group label {
+      font-weight: normal;
+      cursor: pointer;
+      color: #003366;
+    }
+    /* 1x1 photo preview style */
+    #photo_preview {
+      margin-top: 10px;
+      width: 120px;
+      height: 120px;
+      border-radius: 12px;
+      border: 2px solid #00509e;
+      object-fit: cover;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>PWD Application Form - Municipality of Carmen, Cebu</h1>
+
+  <form id="pwdForm" enctype="multipart/form-data">
+    <!-- 1. New Applicant, Renewal, Transfer -->
+    <label>1. Application Type</label>
+    <div class="inline-group">
+      <label><input type="radio" name="application_type" value="New Applicant" required> New Applicant</label>
+      <label><input type="radio" name="application_type" value="Renewal"> Renewal</label>
+      <label><input type="radio" name="application_type" value="Transfer"> Transfer to other barangay</label>
+    </div>
+
+    <!-- 2. PWD Number -->
+    <label for="pwd_number">2. Person with Disability Number (RR-PPMM-BBB-NNNNNNN)</label>
+    <input type="text" id="pwd_number" name="pwd_number" placeholder="e.g. RR-0105-CAR-0000001" required pattern="[A-Z]{2}-\d{4}-[A-Z]{3}-\d{7}" title="Format: RR-PPMM-BBB-NNNNNNN">
+
+    <!-- 3. Date Applied (auto) -->
+    <label for="date_applied">3. Date Applied (mm/dd/yyyy)</label>
+    <input type="date" id="date_applied" name="date_applied" readonly required />
+
+    <!-- 4. 1x1 Photo -->
+    <label for="photo">4. Insert 1x1 Photo (max 10MB)</label>
+    <input type="file" id="photo" name="photo" accept="image/*" required />
+    <img id="photo_preview" alt="Photo Preview" />
+
+    <!-- 5. Personal Information -->
+    <label for="last_name">5. Last Name</label>
+    <input type="text" id="last_name" name="last_name" required />
+
+    <label for="first_name">First Name</label>
+    <input type="text" id="first_name" name="first_name" required />
+
+    <label for="middle_name">Middle Name</label>
+    <input type="text" id="middle_name" name="middle_name" />
+
+    <label for="suffix">Suffix</label>
+    <input type="text" id="suffix" name="suffix" />
+
+    <!-- 6. DOB, Blood Type, Sex -->
+    <label for="dob">6. Date of Birth</label>
+    <input type="date" id="dob" name="dob" required />
+
+    <label for="blood_type">Blood Type</label>
+    <select id="blood_type" name="blood_type" required>
+      <option value="">-- Select Blood Type --</option>
+      <option value="A+">A+</option>
+      <option value="A-">A-</option>
+      <option value="B+">B+</option>
+      <option value="B-">B-</option>
+      <option value="AB+">AB+</option>
+      <option value="AB-">AB-</option>
+      <option value="O+">O+</option>
+      <option value="O-">O-</option>
+    </select>
+
+    <label>Sex</label>
+    <div class="inline-group">
+      <label><input type="radio" name="sex" value="Male" required> Male</label>
+      <label><input type="radio" name="sex" value="Female"> Female</label>
+    </div>
+
+    <!-- 7. Civil Status -->
+    <label for="civil_status">7. Civil Status</label>
+    <select id="civil_status" name="civil_status" required>
+      <option value="">-- Select Civil Status --</option>
+      <option>Single</option>
+      <option>Married</option>
+      <option>Widowed</option>
+      <option>Separated</option>
+      <option>Divorced</option>
+    </select>
+
+    <!-- 8. Type of Disability -->
+    <label for="type_disability">8. Type of Disability</label>
+    <select id="type_disability" name="type_disability" required>
+      <option value="">-- Select Disability Type --</option>
+      <option>Deaf/Hard Hearing</option>
+      <option>Intellectual Disability</option>
+      <option>Learning Disability</option>
+      <option>Mental Disability</option>
+      <option>Physical Disability (Orthopedic)</option>
+      <option>Psychosocial Disability</option>
+      <option>Speech and Language Impairment</option>
+      <option>Visual Disability</option>
+      <option>Cancer (RA11215)</option>
+      <option>Rare Disease (RA10747)</option>
+    </select>
+
+    <!-- 9. Cause of Disability -->
+    <label>9. Cause of Disability</label>
+    <strong>Congenital/Inborn</strong>
+    <div class="inline-group" style="flex-wrap: wrap;">
+      <label><input type="checkbox" name="cause_congenital" value="ADHD"> ADHD</label>
+      <label><input type="checkbox" name="cause_congenital" value="Cerebral Palsy"> Cerebral Palsy</label>
+      <label><input type="checkbox" name="cause_congenital" value="Down Syndrome"> Down Syndrome</label>
+      <label><input type="checkbox" name="cause_congenital" value="Others"> Others</label>
+      <input type="text" name="cause_congenital_others" placeholder="Specify if others" style="max-width: 250px;" />
+    </div>
+    <strong>Acquired</strong>
+    <div class="inline-group" style="flex-wrap: wrap;">
+      <label><input type="checkbox" name="cause_acquired" value="Chronic Illness"> Chronic Illness</label>
+      <label><input type="checkbox" name="cause_acquired" value="Cerebral Palsy"> Cerebral Palsy</label>
+      <label><input type="checkbox" name="cause_acquired" value="Injury"> Injury</label>
+      <label><input type="checkbox" name="cause_acquired" value="Others"> Others</label>
+      <input type="text" name="cause_acquired_others" placeholder="Specify if others" style="max-width: 250px;" />
+    </div>
+
+    <!-- 10. Residence Address -->
+    <label>10. Residence Address</label>
+    <input type="text" name="house_street" placeholder="House No. and Street" required />
+    <input type="text" name="barangay" placeholder="Barangay" required />
+    <input type="text" name="municipality" value="Carmen" readonly />
+    <input type="text" name="province" value="Cebu" readonly />
+    <input type="text" name="region" value="VII" readonly />
+
+    <!-- 11. Contact Details -->
+    <label for="landline">11. Landline No. (optional)</label>
+    <input type="text" id="landline" name="landline" placeholder="Optional" />
+
+    <label for="mobile">Mobile No. (required)</label>
+    <input type="text" id="mobile" name="mobile" required />
+
+    <label for="email">Email Address (optional)</label>
+    <input type="email" id="email" name="email" placeholder="Optional" />
+
+    <!-- 12. Educational Attainment -->
+    <label for="education">12. Educational Attainment</label>
+    <select id="education" name="education" required>
+      <option value="">-- Select Education --</option>
+      <option>None</option>
+      <option>Kindergarten</option>
+      <option>Elementary</option>
+      <option>Junior High School</option>
+      <option>Senior High School</option>
+      <option>College</option>
+      <option>Vocational</option>
+      <option>Post Graduate Program</option>
+    </select>
+
+    <!-- 13. Status of Employment -->
+    <label for="employment_status">13. Status of Employment</label>
+    <select id="employment_status" name="employment_status" required>
+      <option value="">-- Select Status --</option>
+      <option value="Employed">Employed</option>
+      <option value="Unemployed">Unemployed</option>
+      <option value="Self-employed">Self-employed</option>
+    </select>
+
+    <!-- 14. Category and Type of Employment (conditionally displayed) -->
+    <div id="employmentDetails" style="display:none;">
+      <label for="employment_category">Category of Employment</label>
+      <select id="employment_category" name="employment_category">
+        <option value="">-- Select Category --</option>
+        <option>Government</option>
+        <option>Private</option>
+      </select>
+
+      <label for="employment_type">Types of Employment</label>
+      <select id="employment_type" name="employment_type">
+        <option value="">-- Select Type --</option>
+        <option>Permanent/Regular</option>
+        <option>Seasonal</option>
+        <option>Casual</option>
+        <option>Emergency</option>
+      </select>
+    </div>
+
+    <!-- 15. Occupation -->
+    <label for="occupation">15. Occupation</label>
+    <select id="occupation" name="occupation" required>
+      <option value="">-- Select Occupation --</option>
+      <option>Managers</option>
+      <option>Professionals, technical and associate professionals</option>
+      <option>Clerical Support Workers</option>
+      <option>Service and Sales Workers</option>
+      <option>Skilled Agricultural Forestry and Fishery worker</option>
+      <option>Craft and Related trade Workers</option>
+      <option>Plant and Machine Operators and Assemblers</option>
+      <option>Elementary Occupations</option>
+      <option>Armed Forces Occupation</option>
+      <option>Others</option>
+    </select>
+    <input type="text" id="occupation_others" name="occupation_others" placeholder="Specify if Others" style="display:none; margin-top: 10px; max-width: 300px;" />
+
+    <!-- 16. Organization Information -->
+    <label for="org_affiliated">16. Organization Affiliated</label>
+    <input type="text" id="org_affiliated" name="org_affiliated" />
+
+    <label for="contact_person">Contact Person</label>
+    <input type="text" id="contact_person" name="contact_person" />
+
+    <label for="office_address">Office Address</label>
+    <input type="text" id="office_address" name="office_address" />
+
+    <label for="office_tel">Tel. No. (optional)</label>
+    <input type="text" id="office_tel" name="office_tel" />
+
+    <!-- 17. ID Reference Numbers -->
+    <label for="sss_no">17. SSS No.</label>
+    <input type="text" id="sss_no" name="sss_no" />
+
+    <label for="gsis_no">GSIS No.</label>
+    <input type="text" id="gsis_no" name="gsis_no" />
+
+    <label for="pagibig_no">Pag-ibig No.</label>
+    <input type="text" id="pagibig_no" name="pagibig_no" />
+
+    <label for="philhealth_no">Phil Health No.</label>
+    <input type="text" id="philhealth_no" name="philhealth_no" />
+
+    <!-- 18 to 25 Optional Fields -->
+    <label for="accomplished_by">18. Accomplished by <span class="optional-label">(optional)</span></label>
+    <select id="accomplished_by" name="accomplished_by">
+      <option value="">-- Select --</option>
+      <option>Applicant</option>
+      <option>Guardian</option>
+      <option>Representative</option>
+    </select>
+
+    <label for="certifying_physician">19. Name of Certifying Physician <span class="optional-label">(optional)</span></label>
+    <input type="text" id="certifying_physician" name="certifying_physician" placeholder="Last, First, Middle Name" />
+
+    <label for="processing_officer">20. Processing Officer <span class="optional-label">(optional)</span></label>
+    <input type="text" id="processing_officer" name="processing_officer" placeholder="Last, First, Middle Name" />
+
+    <label for="approving_officer">21. Approving Officer <span class="optional-label">(optional)</span></label>
+    <input type="text" id="approving_officer" name="approving_officer" placeholder="Last, First, Middle Name" />
+
+    <label for="encoder">22. Encoder <span class="optional-label">(optional)</span></label>
+    <input type="text" id="encoder" name="encoder" placeholder="Last, First, Middle Name" />
+
+    <label for="reporting_unit">23. Name of Reporting Unit <span class="optional-label">(optional)</span></label>
+    <input type="text" id="reporting_unit" name="reporting_unit" />
+
+    <label for="control_no">24. Control No. <span class="optional-label">(optional)</span></label>
+    <input type="text" id="control_no" name="control_no" />
+
+    <label for="endorsed_by">25. Endorsed By: Barangay Parent Coordinator <span class="optional-label">(optional)</span></label>
+    <input type="text" id="endorsed_by" name="endorsed_by" placeholder="Last, First, Middle Name" />
+
+    <button type="submit">Submit Application</button>
+  </form>
+
+  <!-- Confirmation Modal -->
+  <div id="confirmationModal">
+    <div class="content">
+      <h3>Please Confirm Your Application Data</h3>
+      <pre id="confirmData"></pre>
+      <button id="confirmBtn">Confirm</button>
+      <button id="cancelBtn">Edit</button>
+    </div>
+  </div>
+
+  <script>
+    // Auto-fill Date Applied with today
+    window.addEventListener('DOMContentLoaded', () => {
+      const dateAppliedInput = document.getElementById('date_applied');
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      dateAppliedInput.value = `${yyyy}-${mm}-${dd}`;
+    });
+
+    // Show/hide employment details based on Status of Employment
+    document.getElementById('employment_status').addEventListener('change', function() {
+      const val = this.value;
+      const details = document.getElementById('employmentDetails');
+      if(val === 'Employed') {
+        details.style.display = 'block';
+        document.getElementById('employment_category').required = true;
+        document.getElementById('employment_type').required = true;
+      } else {
+        details.style.display = 'none';
+        document.getElementById('employment_category').required = false;
+        document.getElementById('employment_type').required = false;
+        document.getElementById('employment_category').value = '';
+        document.getElementById('employment_type').value = '';
+      }
+    });
+
+    // Show/hide occupation_others input when "Others" selected
+    document.getElementById('occupation').addEventListener('change', function() {
+      const othersInput = document.getElementById('occupation_others');
+      if(this.value === 'Others') {
+        othersInput.style.display = 'block';
+        othersInput.required = true;
+      } else {
+        othersInput.style.display = 'none';
+        othersInput.required = false;
+        othersInput.value = '';
+      }
+    });
+
+    // Photo preview
+    document.getElementById('photo').addEventListener('change', function(event) {
+      const preview = document.getElementById('photo_preview');
+      const file = event.target.files[0];
+      if(file) {
+        if(file.size > 10 * 1024 * 1024) { // 10 MB
+          alert('File size exceeds 10MB. Please select a smaller file.');
+          event.target.value = '';
+          preview.style.display = 'none';
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+      } else {
+        preview.style.display = 'none';
+      }
+    });
+
+    // Confirmation modal logic and submission
+    const form = document.getElementById('pwdForm');
+    const modal = document.getElementById('confirmationModal');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const confirmDataPre = document.getElementById('confirmData');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Gather form data to show in confirmation modal
+      const formData = new FormData(form);
+      let dataString = '';
+
+      for(const [key, value] of formData.entries()) {
+        // For file, just show filename
+        if(key === 'photo' && value.name) {
+          dataString += `Photo file: ${value.name}\n`;
+        } else {
+          dataString += `${key.replace(/_/g, ' ')}: ${value}\n`;
+        }
+      }
+
+      confirmDataPre.textContent = dataString;
+      modal.style.display = 'flex';
+    });
+
+    cancelBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
+    confirmBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+
+      // Prepare FormData to send (include file)
+      const formData = new FormData(form);
+
+      // Example: Send form data to Google Apps Script Web App URL
+      const scriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+      fetch(scriptURL, {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        if(response.ok) {
+          alert('Application successfully submitted!');
+          form.reset();
+          // Reset date applied to today again
+          const dateAppliedInput = document.getElementById('date_applied');
+          const today = new Date();
+          dateAppliedInput.value = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+          document.getElementById('photo_preview').style.display = 'none';
+          document.getElementById('employmentDetails').style.display = 'none';
+          document.getElementById('occupation_others').style.display = 'none';
+        } else {
+          alert('Submission failed. Please try again later.');
+        }
+      })
+      .catch(error => {
+        console.error('Error!', error.message);
+        alert('Submission error. Please try again later.');
+      });
+    });
+  </script>
+
+</body>
+</html>
