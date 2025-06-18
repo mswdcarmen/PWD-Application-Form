@@ -1,0 +1,59 @@
+function doPost(e) {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheetByName("Sheet1");
+
+    var data = JSON.parse(e.postData.contents);
+
+    // Calculate Date of Expiration (Date Issued + 5 years)
+    var dateIssued = new Date(data.dateIssued);
+    var expirationDate = new Date(dateIssued);
+    expirationDate.setFullYear(expirationDate.getFullYear() + 5);
+
+    // Format date to yyyy-mm-dd
+    function formatDate(d) {
+      return d.getFullYear() + '-' +
+             ('0' + (d.getMonth() + 1)).slice(-2) + '-' +
+             ('0' + d.getDate()).slice(-2);
+    }
+
+    var expirationDateFormatted = formatDate(expirationDate);
+
+    // Determine status
+    var today = new Date();
+    var status = expirationDate > today ? "Active" : "Not Active";
+
+    // Compose Parents/Guardian full name
+    var parentsGuardian = [
+      data.guardianLastName,
+      data.guardianFirstName,
+      data.guardianMiddleName
+    ].filter(Boolean).join(' ');
+
+    // Append data as a new row
+    sheet.appendRow([
+      data.pwdNumber,
+      data.dateIssued,
+      data.lastName,
+      data.firstName,
+      data.middleName,
+      data.suffix,
+      data.typeOfDisability,
+      data.barangay,
+      data.birthDate,
+      data.age,
+      data.sex,
+      parentsGuardian,
+      expirationDateFormatted,
+      status
+    ]);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ result: "success" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (error) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ result: "error", message: error.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
